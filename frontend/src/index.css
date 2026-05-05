@@ -1,0 +1,199 @@
+/* ─── CUTGO Design System ─────────────────────────────────── */
+
+:root {
+  /* Brand */
+  --orange-accent: #E8521A;
+  --blue-primary: #003087;
+
+  /* Apple-native surface system */
+  --apple-bg: #F2F2F7;
+  --apple-surface: #FFFFFF;
+  --apple-surface-2: #F2F2F7;
+  --apple-label: #000000;
+  --apple-label-2: rgba(60, 60, 67, 0.6);
+  --apple-label-3: rgba(60, 60, 67, 0.3);
+  --apple-separator: #C6C6C8;
+  --apple-blue: #007AFF;
+  --apple-green: #34C759;
+  --apple-red: #FF3B30;
+  --apple-radius: 16px;
+  --apple-radius-sm: 10px;
+
+  /* Legacy tokens (kept for other pages) */
+  --bg-app: #F2F2F7;
+  --bg-card: #FFFFFF;
+  --text-main: #000000;
+  --text-muted: rgba(60, 60, 67, 0.6);
+  --accent: #E8521A;
+  --border: rgba(0, 0, 0, 0.08);
+  --card-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --safe-green: #34C759;
+  --danger-red: #FF3B30;
+  --blue-light: #007AFF;
+}
+
+[data-theme='dark'] {
+  /* Apple dark surfaces */
+  --apple-bg: #000000;
+  --apple-surface: #1C1C1E;
+  --apple-surface-2: #2C2C2E;
+  --apple-label: #FFFFFF;
+  --apple-label-2: rgba(235, 235, 245, 0.6);
+  --apple-label-3: rgba(235, 235, 245, 0.3);
+  --apple-separator: rgba(84, 84, 88, 0.65);
+  --apple-blue: #0A84FF;
+  --apple-green: #30D158;
+  --apple-red: #FF453A;
+
+  /* Legacy tokens */
+  --bg-app: #000000;
+  --bg-card: #1C1C1E;
+  --text-main: #FFFFFF;
+  --text-muted: rgba(235, 235, 245, 0.6);
+  --accent: #FF6B3A;
+  --border: rgba(255, 255, 255, 0.08);
+  --card-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  --safe-green: #30D158;
+  --danger-red: #FF453A;
+  --blue-light: #0A84FF;
+}
+
+/* ─── Reset ───────────────────────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--apple-bg);
+}
+
+html, body {
+  background-color: var(--apple-bg);
+  color: var(--apple-label);
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.1px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+  font-weight: 400;
+}
+
+p, span {
+  letter-spacing: -0.1px;
+}
+
+/* ─── Typography ──────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+}
+
+.greeting-heading {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+  line-height: 1.1;
+}
+
+.text-xs-uppercase {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--apple-label-2);
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────── */
+* { scrollbar-width: thin; }
+
+[data-theme='dark'] { scrollbar-color: #3A3A3C #000000; }
+[data-theme='light'] { scrollbar-color: #C6C6C8 #F2F2F7; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--apple-separator); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--apple-label-2); }
+
+/* ─── Utility links ───────────────────────────────────────── */
+.nav-link {
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s;
+  letter-spacing: 0.1px;
+}
+.nav-link:hover { opacity: 0.7; }
+
+.cta-label { letter-spacing: 0.3px; }
+
+/* ─── Buttons ─────────────────────────────────────────────── */
+button {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* ─── Card interactions ───────────────────────────────────── */
+.apple-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.apple-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+.apple-card:active {
+  transform: translateY(0);
+}
+
+/* ─── Skeleton loading ────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--apple-separator) 0%,
+    var(--apple-surface-2) 50%,
+    var(--apple-separator) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease infinite;
+  border-radius: 6px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─── Green pulse dot ─────────────────────────────────────── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* ─── Glass card (legacy, kept for other pages) ───────────── */
+.glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--apple-radius);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+/* ─── Responsive nav ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  .desktop-menu { display: none !important; }
+}
