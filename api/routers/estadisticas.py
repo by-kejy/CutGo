@@ -4,7 +4,7 @@ from sqlalchemy import text
 from typing import List, Optional
 from pydantic import BaseModel
 
-from backend.database import get_db
+from ..database import get_db
 
 router = APIRouter(
     prefix="/api/estadisticas",
