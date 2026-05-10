@@ -1,12 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .routers import rutas, horarios, incidentes, estadisticas, auth, paradas
+
 app = FastAPI(title="CutGo API")
 
 # Configure CORS for the frontend
 origins = [
     "http://localhost:5173",
     "http://localhost:5174",
+    "https://cutgo-nine.vercel.app",
 ]
 
 app.add_middleware(
