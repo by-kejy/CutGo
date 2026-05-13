@@ -1,4 +1,5 @@
 import os
+from urllib.parse import quote_plus
 from dotenv import load_dotenv
 load_dotenv(override=False)
 from sqlalchemy import create_engine
@@ -10,18 +11,17 @@ DB_USER = os.getenv("DB_USER", "root")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "")
 DB_NAME = os.getenv("DB_NAME", "cutgo")
 
-print("DB_HOST:", os.getenv("DB_HOST"))
-print("DB_PORT:", os.getenv("DB_PORT"))
-print("DB_USER:", os.getenv("DB_USER"))
-print("DB_NAME:", os.getenv("DB_NAME"))
+print("DB_HOST:", DB_HOST)
+print("DB_PORT:", DB_PORT)
+print("DB_USER:", DB_USER)
+print("DB_NAME:", DB_NAME)
 
-DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+DATABASE_URL = f"mysql+pymysql://{DB_USER}:{quote_plus(DB_PASSWORD)}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
     pool_recycle=3600,
-    connect_args={"ssl_disabled": True}
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
