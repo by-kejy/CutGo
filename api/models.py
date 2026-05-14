@@ -4,7 +4,7 @@ from sqlalchemy.sql import func
 from .database import Base
 
 class Usuario(Base):
-    __tablename__ = "USUARIOS"
+    __tablename__ = "usuarios"
 
     id_usuario = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nombre = Column(String(100), nullable=False)
@@ -21,7 +21,7 @@ class Usuario(Base):
     calificaciones = relationship("Calificacion", back_populates="usuario")
 
 class Ruta(Base):
-    __tablename__ = "RUTAS"
+    __tablename__ = "rutas"
 
     id_ruta = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nombre_ruta = Column(String(100), nullable=False)
@@ -34,10 +34,10 @@ class Ruta(Base):
     calificaciones = relationship("Calificacion", back_populates="ruta")
 
 class Parada(Base):
-    __tablename__ = "PARADAS"
+    __tablename__ = "paradas"
 
     id_parada = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    id_ruta = Column(Integer, ForeignKey("RUTAS.id_ruta", ondelete="CASCADE"), nullable=False)
+    id_ruta = Column(Integer, ForeignKey("rutas.id_ruta", ondelete="CASCADE"), nullable=False)
     nombre_parada = Column(String(120), nullable=False)
     latitud = Column(Numeric(10, 7), nullable=False)
     longitud = Column(Numeric(10, 7), nullable=False)
@@ -49,11 +49,11 @@ class Parada(Base):
     incidentes = relationship("Incidente", back_populates="parada")
 
 class RegistroHorario(Base):
-    __tablename__ = "REGISTROS_HORARIO"
+    __tablename__ = "registros_horario"
 
     id_registro = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    id_parada = Column(Integer, ForeignKey("PARADAS.id_parada"), nullable=False)
-    id_usuario = Column(Integer, ForeignKey("USUARIOS.id_usuario"), nullable=False)
+    id_parada = Column(Integer, ForeignKey("paradas.id_parada"), nullable=False)
+    id_usuario = Column(Integer, ForeignKey("usuarios.id_usuario"), nullable=False)
     timestamp_real = Column(DateTime, nullable=False)
     validaciones_pos = Column(Integer, default=0)
     validaciones_neg = Column(Integer, default=0)
@@ -62,11 +62,11 @@ class RegistroHorario(Base):
     usuario = relationship("Usuario", back_populates="registros")
 
 class Incidente(Base):
-    __tablename__ = "INCIDENTES"
+    __tablename__ = "incidentes"
 
     id_incidente = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    id_parada = Column(Integer, ForeignKey("PARADAS.id_parada"), nullable=False)
-    id_usuario = Column(Integer, ForeignKey("USUARIOS.id_usuario"), nullable=False)
+    id_parada = Column(Integer, ForeignKey("paradas.id_parada"), nullable=False)
+    id_usuario = Column(Integer, ForeignKey("usuarios.id_usuario"), nullable=False)
     tipo_incidente = Column(Enum('robo', 'acoso', 'accidente', 'camion_lleno', 'retraso', 'otro'), nullable=False)
     descripcion = Column(Text)
     estado = Column(Enum('activo', 'resuelto'), default='activo')
@@ -76,11 +76,11 @@ class Incidente(Base):
     usuario = relationship("Usuario", back_populates="incidentes")
 
 class Calificacion(Base):
-    __tablename__ = "CALIFICACIONES"
+    __tablename__ = "calificaciones"
 
     id_calif = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    id_ruta = Column(Integer, ForeignKey("RUTAS.id_ruta"), nullable=False)
-    id_usuario = Column(Integer, ForeignKey("USUARIOS.id_usuario"), nullable=False)
+    id_ruta = Column(Integer, ForeignKey("rutas.id_ruta"), nullable=False)
+    id_usuario = Column(Integer, ForeignKey("usuarios.id_usuario"), nullable=False)
     puntuacion = Column(Numeric(2, 1), nullable=False)
     categoria = Column(Enum('seguridad', 'puntualidad', 'comodidad', 'limpieza'), nullable=False)
     timestamp = Column(DateTime, server_default=func.now())
