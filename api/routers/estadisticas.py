@@ -37,13 +37,13 @@ class CalificacionEstadistica(BaseModel):
 
 @router.get("/resumen", response_model=ResumenEstadistica)
 def obtener_resumen_estadisticas(db: Session = Depends(get_db)):
-    total_usuarios = db.execute(text("SELECT COUNT(*) FROM USUARIOS")).scalar() or 0
-    total_rutas_activas = db.execute(text("SELECT COUNT(*) FROM RUTAS WHERE activa = 1")).scalar() or 0
-    total_registros_horario = db.execute(text("SELECT COUNT(*) FROM REGISTROS_HORARIO")).scalar() or 0
-    incidentes_este_mes = db.execute(text("SELECT COUNT(*) FROM INCIDENTES WHERE fecha_reporte >= DATE_SUB(NOW(), INTERVAL 1 MONTH)")).scalar() or 0
+    total_usuarios = db.execute(text("SELECT COUNT(*) FROM usuarios")).scalar() or 0
+    total_rutas_activas = db.execute(text("SELECT COUNT(*) FROM rutas WHERE activa = 1")).scalar() or 0
+    total_registros_horario = db.execute(text("SELECT COUNT(*) FROM registros_horario")).scalar() or 0
+    incidentes_este_mes = db.execute(text("SELECT COUNT(*) FROM incidentes WHERE fecha_reporte >= DATE_SUB(NOW(), INTERVAL 1 MONTH)")).scalar() or 0
     puntualidad_raw = db.execute(text("""
         SELECT ROUND(AVG(puntuacion) / 5 * 100)
-        FROM CALIFICACIONES
+        FROM calificaciones
         WHERE categoria = 'puntualidad'
     """)).scalar()
     puntualidad_percent = int(puntualidad_raw) if puntualidad_raw is not None else None
@@ -60,9 +60,9 @@ def obtener_resumen_estadisticas(db: Session = Depends(get_db)):
 def obtener_incidentes_por_ruta(db: Session = Depends(get_db)):
     query = text("""
         SELECT r.nombre_ruta, COUNT(*) as total
-        FROM INCIDENTES i 
-        JOIN PARADAS p ON i.id_parada = p.id_parada
-        JOIN RUTAS r ON p.id_ruta = r.id_ruta
+        FROM incidentes i 
+        JOIN paradas p ON i.id_parada = p.id_parada
+        JOIN rutas r ON p.id_ruta = r.id_ruta
         GROUP BY r.nombre_ruta ORDER BY total DESC
     """)
     result = db.execute(query).fetchall()
@@ -71,10 +71,10 @@ def obtener_incidentes_por_ruta(db: Session = Depends(get_db)):
 @router.get("/incidentes", response_model=List[IncidenteEstadistica])
 def obtener_estadisticas_incidentes(db: Session = Depends(get_db)):
     query = text("""
-        SELECT P.nombre_parada, COUNT(I.id_incidente) AS total_incidentes
-        FROM PARADAS P
-        JOIN INCIDENTES I ON P.id_parada = I.id_parada
-        GROUP BY P.id_parada, P.nombre_parada
+        SELECT p.nombre_parada, COUNT(i.id_incidente) AS total_incidentes
+        FROM paradas p
+        JOIN incidentes i ON p.id_parada = i.id_parada
+        GROUP BY p.id_parada, p.nombre_parada
         ORDER BY total_incidentes DESC
         LIMIT 5
     """)
@@ -96,8 +96,8 @@ def obtener_estadisticas_frecuencia(db: Session = Depends(get_db)):
                         ORDER BY rh.timestamp_real
                     )
                 ) AS diff_minutes
-            FROM REGISTROS_HORARIO rh
-            JOIN PARADAS p ON rh.id_parada = p.id_parada
+            FROM registros_horario rh
+            JOIN paradas p ON rh.id_parada = p.id_parada
         ) sub
         WHERE diff_minutes IS NOT NULL
           AND diff_minutes > 0
@@ -112,11 +112,11 @@ def obtener_estadisticas_frecuencia(db: Session = Depends(get_db)):
 @router.get("/calificaciones", response_model=List[CalificacionEstadistica])
 def obtener_estadisticas_calificaciones(db: Session = Depends(get_db)):
     query = text("""
-        SELECT R.nombre_ruta, AVG(C.puntuacion) AS promedio_seguridad
-        FROM RUTAS R
-        JOIN CALIFICACIONES C ON R.id_ruta = C.id_ruta
-        WHERE C.categoria = 'seguridad'
-        GROUP BY R.id_ruta, R.nombre_ruta
+        SELECT r.nombre_ruta, AVG(c.puntuacion) AS promedio_seguridad
+        FROM rutas r
+        JOIN calificaciones c ON r.id_ruta = c.id_ruta
+        WHERE c.categoria = 'seguridad'
+        GROUP BY r.id_ruta, r.nombre_ruta
     """)
     result = db.execute(query).fetchall()
     return [dict(row._mapping) for row in result]
